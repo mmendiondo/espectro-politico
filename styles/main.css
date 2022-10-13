@@ -1,0 +1,287 @@
+:root {
+  --cube-height: 300px;
+  --cube-width: 300px;
+}
+
+*{
+    font-family: Arial;
+}
+
+#experiment {
+  -webkit-perspective: 1000px;
+  -webkit-perspective-origin: 50% 100px;
+  display: inline-block;
+  width: 50%;
+  float: left;
+  padding-top: 100px;
+  padding-left: 0%;
+  height: 500px;
+
+}
+
+h2
+{
+  font-size: 14px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+#cube {
+  pointer-events: none;
+  position: relative;
+  margin: 0 auto;
+  height: var(--cube-height);
+  width: var(--cube-width);
+  -webkit-transition: -webkit-transform 2s linear;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: rotateX(-10deg) rotateY(40deg);
+}
+
+.face {
+  position: absolute;
+  height: var(--cube-height);
+  width: var(--cube-width);  
+}
+
+.cartesian-arrow {
+  position: absolute;
+  height: 5px;
+  width: 80%;
+  background-color: rgba(50, 50, 50, 0.5);
+  margin: auto;
+  text-align: center;
+  line-height: 25px;
+}
+
+#cube .x  {
+  margin: 0-20px;
+ -webkit-transform: translate3d(-150px,150px,-150px) rotateZ(90deg) ;
+ 
+}
+
+#cube .y  {
+  -webkit-transform: translate3d(0,300px,150px);
+  margin: 20px 0;
+}
+
+#cube .z  {
+  -webkit-transform: translate3d(-150px,300px,0) rotateY(270deg);
+  margin: 20px 0;
+}
+
+.particle {
+  position: absolute;
+  height: 5px;
+  width: 5px;
+
+  background: blue;
+}
+
+#cube .one  {
+  -webkit-transform: rotateY(-90deg) translateZ(150px);
+  background-color: rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+}
+
+#cube .two {
+  -webkit-transform: translateZ(150px);
+  background-color: rgba(255,255,0, 0.05);
+  pointer-events: none;
+}
+
+#cube .three {
+  -webkit-transform: rotateY(90deg) translateZ(150px);
+  background-color: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+#cube .four{
+  -webkit-transform: rotateY(180deg) translateZ(150px);
+  background-color: rgba(255, 0, 0, 0.05);
+  pointer-events: none;
+}
+#cube .one .grid-item, #cube .two .grid-item, #cube .three .grid-item, #cube .four .grid-item
+{
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+#cube .five {
+  -webkit-transform: rotateX(90deg) translateZ(150px);
+}
+
+#cube .six {
+  -webkit-transform: rotateX(-90deg) rotateZ(180deg) rotateY(180deg) translateZ(-150px) ;
+}
+
+#cube .internal {
+  -webkit-transform: rotateX(90deg) translateZ(0px);
+}
+
+.left-arrow
+{
+
+  width: 0; 
+  height: 0;
+  position: relative;
+  top:-7.5px; 
+  left:-20px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; 
+  border-right:20px solid rgba(0, 0, 0, 0.4); 
+}
+.right-arrow
+{
+  width: 0; 
+  height: 0;
+  position: relative;
+  top:-27.5px; 
+  left:100%;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; 
+  border-left:20px solid rgba(0, 0, 0, 0.4);
+}
+
+.left-text
+{
+    width: auto;
+    float: left;
+    position: relative;
+    left: -10px;
+    top: -25px;
+}
+.right-text
+{
+    width: auto;
+    float: right;
+    position: relative;
+    top: -25px;
+    left: 10px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background: linear-gradient(to right, rgba(0,0,0,.8), rgba(0,0,0,0), rgba(255,255,255,.8)), 
+  linear-gradient(to bottom, rgba(255,0,0,.8), rgba(0,0,0,0), rgba(255,255,0,.8));
+}
+.grid-item {
+
+  border: 1px solid rgba(0, 0, 0, 0.8);
+    box-sizing: border-box;
+    text-align: center;
+    height: 100px;
+    width: 100px;
+    padding-top: 50px;
+    /* color: orange; */
+    text-shadow: 0 0 2px white;
+    text-overflow: ellipsis;
+    overflow: hidden;
+        font-size: 10pt;
+    -webkit-text-stroke: 0.6px black;
+    -webkit-text-fill-color: black;
+}
+
+.ball {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  left:-6px;
+  top:-6px;
+  margin: 0;
+  border-radius: 50%;  
+  background: radial-gradient(circle at 50% 100%, #323232, #0a0a0a 50%, #000000 100%);  
+  -webkit-transition: -webkit-transform 2s linear;
+  -webkit-transform-style: none;
+}
+
+.ball:before {
+  content: "";
+  position: absolute;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.8) 70%);
+  border-radius: 50%;
+  bottom: 2.5%;
+  left: 5%;
+  opacity: 0.6;
+  height: 100%;
+  width: 90%;
+  filter: blur(5px);
+  z-index: 2;
+}
+
+.result
+{
+    display: inline-block;
+    width: 100px;
+    margin: 10px -40px;
+    text-align: center;
+}
+
+.form{
+  display: inline-block;
+  width: 50%;
+  float: left;
+  height: 650px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+}
+.collapsible {
+  background-color: #699;
+  color: white;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 3px;
+  margin:1px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+
+.option{
+    background: rgba(222,222,55,0.4);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.option:hover{
+  background: rgba(35,202,202,0.4);
+}
+
+.selected
+{
+  background: rgba(55,55,242,0.4);
+}
+.btn{
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  background: #696;
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+  border: outset;
+}
