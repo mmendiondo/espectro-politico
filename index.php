@@ -26,10 +26,6 @@
 
   <div>
     <h2>Por favor, responda a las 20 preguntas.</h2>
-
-    Las 10 primeras preguntas le posicionarán en cuestiones sociales.
-    Las últimas 10 preguntas le posicionarán en cuestiones económicas.
-    Las últimas 10 preguntas le posicionarán en cuestiones políticas.
   </div>
 
 

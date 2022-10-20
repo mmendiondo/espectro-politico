@@ -8,30 +8,37 @@ var mousedownID = -1;  //Global ID of mouse down interval
 function mousedown(event) {
   //Prevent multimple loops!
   if(mousedownID==-1)  
-    mousedownID = setInterval(function(){whilemousedown(event.x, event.y);}, 100);
+    mousedownID = setInterval(function(){whilemousedown(event.x || event.targetTouches[0].clientX, event.y || event.targetTouches[0].clientY);}, 100);
 }
 
 function mousemove(event)
 {
-  yPos = event.x;
-  xPos = event.y;
+  yPos = event.x || event.targetTouches[0].clientX;
+  xPos = event.y || event.targetTouches[0].clientY;
 }
 
 function mouseup(event) {
+  originXtransform = xTransform;
+  originYtransform = yTransform;
+
    if(mousedownID!=-1) {  //Only stop if exists
      clearInterval(mousedownID);
      mousedownID=-1;
    }
 }
+
 var xTransform = 0;
 var yTransform = 0;
+var originXtransform = 0;
+var originYtransform = 0;
+
 function whilemousedown(initialPositionY, initialPositionX) {
  
-  xTransform = ((initialPositionX-xPos)/10)*Math.PI;
-  yTransform = ((initialPositionY-yPos)/10)*Math.PI;
- 
-  cube.style.transform = "rotateX("+(-xTransform)+"deg) rotateY("+(-yTransform)+"deg)";
-  (document.getElementsByClassName('ball')[0]).style.webkitTransform = translateBall + "rotateY("+yTransform+"deg) rotateX("+xTransform+"deg)" ;
+  xTransform = originXtransform + ((initialPositionX-xPos)/10)*Math.PI;
+  yTransform = originYtransform + ((initialPositionY-yPos)/10)*Math.PI;
+
+  cube.style.transform = "rotateX("+(xTransform)+"deg) rotateY("+(-yTransform)+"deg)";
+  (document.getElementsByClassName('ball')[0]).style.webkitTransform = translateBall + " rotateY("+(yTransform)+"deg)" ;
 }
 
 //Assign events
@@ -40,6 +47,14 @@ experiment.addEventListener("mousemove", mousemove);
 experiment.addEventListener("mouseup", mouseup);
 //Also clear the interval when user leaves the window with mouse
 experiment.addEventListener("mouseout", mouseup);
+
+//Assign events
+experiment.addEventListener("touchstart", mousedown);
+experiment.addEventListener("touchmove", mousemove);
+experiment.addEventListener("touchend", mouseup);
+//Also clear the interval when user leaves the window with mouse
+experiment.addEventListener("touchcancel", mouseup);
+
 
 (document.getElementsByClassName('ball')[0]).style.webkitTransform = "rotateY(-45deg) rotateX(30deg)";
 
@@ -91,7 +106,7 @@ function calculateAxis(elem)
 
 function setBallPosition(xballTransform,yballTransform,zballTransform){
   translateBall = "translate3d("+xballTransform+"px"+","+yballTransform+"px"+","+(zballTransform-150)+"px)";  
-  (document.getElementsByClassName('ball')[0]).style.webkitTransform = translateBall + "rotateY("+yTransform+"deg) rotateX("+xTransform+"deg)" ;
+  (document.getElementsByClassName('ball')[0]).style.webkitTransform = translateBall + " rotateY("+(yTransform)+"deg)" ;
 }
 
 var translateBall =  "translate3d("+xballTransform+"px"+","+yballTransform+"px"+","+(zballTransform-150)+"px)";
