@@ -17,13 +17,14 @@
   padding-left: 0%;
   height: 500px;
   cursor: grab;
+  opacity: 0;
 }
 .result
 {
-    display: inline-block;
-    width: 100px;
-    margin: 10px -40px;
-    text-align: center;
+  display: inline-block;
+  width: 100px;
+  margin: 10px -40px;
+  text-align: center;
 }
 
 .inlineBlock
@@ -34,21 +35,18 @@
 .movable-3d-icon
 {
   background: url(3d-view.png);
-  height: 50px;
-  width: 90px;
+  height: 47px;
   background-size: contain;
-  background-position: 10px;
+  background-position: 20px;
   background-repeat: no-repeat;
-  position: absolute;
-  top: 50px;
   right: 0px;
+  float: right;
 }
 
 .form{
   display: inline-block;
   width: 100%;
   float: left;
-  height: 650px;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -57,14 +55,13 @@
 @media only screen and (min-width: 962px) {
   /* For desktop: */
   #experiment {
-    width: 50%;
+    
     -webkit-perspective: 1000px;
   }
   .form{
-    width: 50%;
+   
   }
 }
-
 
 #experiment:active{
   cursor: grabbing;
@@ -72,6 +69,13 @@
 
 h2
 {
+  line-height: 2em;
+  font-size: 18px;
+}
+
+h3
+{
+  line-height: 2em;
   font-size: 14px;
 }
 
@@ -221,7 +225,6 @@ h2
   linear-gradient(to bottom, rgba(255,0,0,.8), rgba(0,0,0,0), rgba(255,255,0,.8));
 }
 .grid-item {
-
   border: 1px solid rgba(0, 0, 0, 0.8);
   box-sizing: border-box;
   text-align: center;
@@ -238,7 +241,6 @@ h2
 }
 
 .ball {
-  
   position: absolute;
   width: 12px;
   height: 12px;
@@ -255,8 +257,6 @@ h2
 
 .ball:before {
   content: "";
-  
-  
   border-radius: 50%;
   bottom: 2.5%;
   left: 5%;
@@ -291,11 +291,9 @@ h2
 
 .content {
   padding: 0 18px;
-  display: none;
-  overflow: hidden;
-  
+  /*display: none;*/
+  overflow: hidden;  
 }
-
 
 .option{
     /*background: rgba(222,222,55,0.4);*/
@@ -304,6 +302,7 @@ h2
     margin: 10px;
     border-radius: 2px;
     cursor: pointer;
+    font-size: 12pt;
 }
 
 .option:hover{
@@ -316,8 +315,6 @@ h2
 }
 .btn{
   display: inline-block;
-  margin: 2% 10%;
-  width: 80%;
   padding: 15px;
   border-radius: 4px;
   background: rgba(5,102,102,0.4);
@@ -335,4 +332,54 @@ h2
 .btn:active
 {
   background: rgba(35,202,202,0.4);
+}
+
+/* Reset some default styles */
+body, h1, h2, h3, p {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+}
+
+header {
+  background-color: #444;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  
+}
+
+main {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.test-question {
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  float: left;
+  transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  border: none;
+  padding: 0;
+  width: 100%;
+}
+
+.test-question.show,#experiment.show {
+  height: auto;
+  opacity: 1;
+  /*transform: translateY(0);*/
+}
+
+#preguntas{
+  width: 50%;
+  min-width: 50%;
+  margin: 20px auto;
 }

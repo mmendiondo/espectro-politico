@@ -1,36 +1,34 @@
-loadJson();
+
+
 
 function loadJson()
 {
   var txt = "";
 
-  jsonObject.preguntas.forEach(function(pregunta)
+  jsonObject.preguntas.forEach(function(pregunta, index)
       {
         let pregsDiv = document.getElementById("preguntas");
         let b = document.createElement("button");
         b.type = "button";
-        b.className = "collapsible";
-        b.innerHTML = pregunta.title;
+        b.className = "test-question" + (index == 0? " show": "");
 
-        b.addEventListener("click", function() {
-          this.classList.toggle("active");
-          var content = this.nextElementSibling;
-          if (content.style.display === "block") {
-            content.style.display = "none";
-          } else {
-            content.style.display = "block";
-          }
-        });
+        let title = document.createElement("h2");
+        title.innerHTML = pregunta.title;
+        b.append(title);
+
+        //b.addEventListener("click", function() {
+        //  this.classList.toggle("active");
+        //});
 
         let d = document.createElement("div");
-        let h2 = document.createElement("h2");
+        let h2 = document.createElement("h3");
 
         h2.innerHTML = pregunta.description;
         d.className = "content " + pregunta.type;
         d.append(h2);
 
         pregsDiv.append(b);
-        pregsDiv.append(d);
+        b.append(d);
         
         pregunta.options.forEach(function(option){
           
@@ -41,17 +39,81 @@ function loadJson()
           optDiv.className = "option " + option.value;
           optDiv.innerHTML = option.text;
           optDiv.addEventListener("click", function() {
+            showNextQuestion();
             Array.from(this.parentElement.children).forEach(function(elem){elem.classList.remove("selected");})
             this.classList.toggle("selected");
+            if(index == 29)
+            {
+              finalize();
+            }
           });
-
           d.append(optDiv);
         });
-
-
       });
 }
 
+
+var btn = document.getElementsByClassName("btn")[0];
+function restart()
+{
+  currentQuestionIndex = 0;
+  document.getElementsByClassName("test-question")[0].classList.add('show');
+  experiment.classList.remove('show');
+}
+btn.addEventListener("click", restart);
+
+function finalize() {
+
+  experiment.classList.add('show');
+  var options = document.getElementsByClassName("selected");
+  const mapSelected = Array.from(options).map(x => ({
+      "id": x.getAttribute("data-id"),
+      "selected": x.getAttribute("data-value")
+    }));
+  var myresult = document.getElementById('myresult-ball');
+  setBallPosition(myresult, mapSelected);
+  orientateBall(myresult, xTransform || -10,  yTransform || -40);
+
+  Object.keys(movements).forEach(function(key)
+    {
+
+        if(!document.getElementById(key + "-ball"))
+        {
+          let figure = document.createElement("figure");
+          let span = document.createElement("span");
+          span.className="result";
+          span.innerHTML = key;
+          
+          figure.className = "ball";
+          figure.id = key + "-ball";
+          figure.append(span);
+
+          cube.append(figure);
+
+          setBallPosition(figure, movements[key].respuestas);
+          orientateBall(figure, xTransform || -10,  yTransform || -40);
+        }
+    }
+  );
+}
+
+loadJson();
+
+
+const testQuestions = document.querySelectorAll('.test-question');
+let currentQuestionIndex = 0;
+
+function showNextQuestion() {
+  if (currentQuestionIndex < testQuestions.length) {
+    testQuestions[currentQuestionIndex].classList.remove('show');
+    currentQuestionIndex++;
+    if (currentQuestionIndex < testQuestions.length) {
+    requestAnimationFrame(() => {
+          testQuestions[currentQuestionIndex].classList.add('show');
+        });
+    }
+  }
+}
    
 var xAngle = 0, yAngle = 0;
 var xBallsAngle = 0, yBallsAngle = 0;
@@ -90,6 +152,21 @@ function mouseup(event) {
    }
 }
 
+let scale = 1;
+function wheel(event) {
+
+  event.preventDefault();
+
+  scale += event.deltaY * -0.001;
+
+  // Restrict scale
+  scale = Math.min(Math.max(0.325, scale), 2.5);
+
+  // Apply scale transform
+  cube.style.transform = " scale(" + scale + ")" + "rotateX("+(xTransform)+"deg) rotateY("+(-yTransform)+"deg)" ;
+
+}
+
 var xTransform = 10;
 var yTransform = -40;
 var originXtransform = 0;
@@ -106,7 +183,7 @@ function whilemousedown(initialPositionY, initialPositionX) {
     xTransform = originXtransform + ((initialPositionX-touchXPos)/3)*Math.PI;
     yTransform = originYtransform + ((initialPositionY-touchYPos)/3)*Math.PI;
 
-    cube.style.transform = "rotateX("+(xTransform)+"deg) rotateY("+(-yTransform)+"deg)";
+    cube.style.transform =  " scale(" + scale + ")" + "rotateX("+(xTransform)+"deg) rotateY("+(-yTransform)+"deg)" ;
 
     Array.from(document.getElementsByClassName('ball')).forEach(function(ball)
     {
@@ -119,7 +196,7 @@ function moveBallToPosition(ball, x, y, z)
   const regex = /translate3d(.*) /i;
   ball.style.webkitTransform = "translate3d("+x+"px"+","+y+"px"+","+(z-150)+"px) " + ball.style.webkitTransform.replace(regex, '') ;
   ball.style.background  = "rgba("+x+","+y+","+z+",0.8)";
-  ball.style.background = "radial-gradient(circle at 75% 25%, #ffffff, " + "rgba("+y+","+z+","+x+",1)" +" 70%, #000000 100%)";
+  ball.style.background = "radial-gradient(circle at 75% 25%, #ffffff, " + "rgba("+x+","+y+","+z+",1)" +" 70%, #000000 100%)";
 }
 
 function orientateBall(ball, xDegTransform, yDegTransform)
@@ -128,7 +205,6 @@ function orientateBall(ball, xDegTransform, yDegTransform)
   const regex2 = / rotateX(.*)/i;
   ball.style.webkitTransform = ball.style.webkitTransform.replace(regex, '').replace(regex2, '') + " rotateY("+(yDegTransform)+"deg)" + " rotateX("+(-xDegTransform)+"deg)";
 }
-
 
 ['mousedown','touchstart'].forEach( function(evt) {
     experiment.addEventListener(evt, mousedown, false);
@@ -142,44 +218,8 @@ function orientateBall(ball, xDegTransform, yDegTransform)
     experiment.addEventListener(evt, mouseup, false);
 });
 
-
-var btn = document.getElementsByClassName("btn")[0];
-
-btn.addEventListener("click", function() {
-
-  var options = document.getElementsByClassName("selected");
-  const mapSelected = Array.from(options).map(x => ({
-      "id": x.getAttribute("data-id"),
-      "selected": x.getAttribute("data-value")
-    }));
-  var myresult = document.getElementById('myresult-ball');
-  setBallPosition(myresult, mapSelected);
-  orientateBall(myresult, xTransform || -10,  yTransform || -40);
-
-  Object.keys(movements).forEach(function(key)
-    {
-
-        if(!document.getElementById(key + "-ball"))
-        {
-          let figure = document.createElement("figure");
-          let span = document.createElement("span");
-          span.className="result";
-          span.innerHTML = key;
-          
-          figure.className = "ball";
-          figure.id = key + "-ball";
-          figure.append(span);
-
-          cube.append(figure);
-
-          setBallPosition(figure, movements[key].respuestas);
-          orientateBall(figure, xTransform || -10,  yTransform || -40);
-        }
-    }
-  );
-
-  
-
+['wheel'].forEach( function(evt) {
+    experiment.addEventListener(evt, wheel, false);
 });
 
 function setBallPosition(ball, selections)

@@ -1,5 +1,5 @@
 let movements = {
-  "Peronismo": {"respuestas": [
+  "Massa": {"respuestas": [
   		{"id": 1, "selected": 2},
   		{"id": 2, "selected": 2},
   		{"id": 3, "selected": 3},
@@ -31,7 +31,7 @@ let movements = {
       {"id": 29, "selected": 2},
       {"id": 30, "selected": 1}
   	]},
-   "Anarcocapitalismo": {"respuestas": [
+   "Milei": {"respuestas": [
       {"id": 1, "selected": 1},
       {"id": 2, "selected": 3},
       {"id": 3, "selected": 1},
